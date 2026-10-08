@@ -2,25 +2,23 @@
 
 import { useState } from "react";
 
-export default function PuddingCrafter() {
-  const [flavor, setFlavor] = useState("");
+export default function WildHarvest() {
+  const [foragedItems, setForagedItems] = useState("");
   const [recipe, setRecipe] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!flavor) return;
+    if (!foragedItems) return;
 
     setLoading(true);
-    setRecipe(""); // Clear previous recipe while loading a new one
+    setRecipe(""); 
 
     try {
       const response = await fetch("/api/generate-recipe", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ flavorProfile: flavor }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ foragedItems }),
       });
 
       const data = await response.json();
@@ -32,37 +30,37 @@ export default function PuddingCrafter() {
       }
     } catch (error) {
       console.error(error);
-      setRecipe("Failed to connect to the server. Ensure the API is running.");
+      setRecipe("Failed to connect to the local server. Ensure Ollama is running in the background.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-amber-50 flex items-center justify-center p-4">
-      <div className="max-w-xl w-full bg-white rounded-2xl shadow-xl p-8 border border-amber-100">
-        <h1 className="text-3xl font-bold text-amber-900 mb-2">
-          PuddingCrafter AI 🍮
+    <div className="min-h-screen bg-stone-100 flex items-center justify-center p-4">
+      <div className="max-w-xl w-full bg-white rounded-2xl shadow-xl p-8 border border-green-200">
+        <h1 className="text-3xl font-bold text-green-900 mb-2">
+          WildHarvest AI 🌲
         </h1>
-        <p className="text-amber-700 mb-6">
-          Craft innovative caramel sauces for your steamed egg pudding.
+        <p className="text-green-700 mb-6">
+          Forage for ingredients on your trail, and let AI craft your campfire dinner menu. (Runs 100% Offline)
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label 
-              htmlFor="flavor" 
-              className="block text-sm font-medium text-amber-900 mb-1"
+              htmlFor="foragedItems" 
+              className="block text-sm font-medium text-green-900 mb-1"
             >
-              Desired Sauce Flavor Profile
+              What did you find in the wild today?
             </label>
             <input
-              id="flavor"
+              id="foragedItems"
               type="text"
-              value={flavor}
-              onChange={(e) => setFlavor(e.target.value)}
-              placeholder="e.g.: Bitter-sweet Arabica coffee with a hint of cranberry"
-              className="w-full px-4 py-2 border text-amber-900 border-amber-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
+              value={foragedItems}
+              onChange={(e) => setForagedItems(e.target.value)}
+              placeholder="e.g., Meaty wild mushrooms, fern shoots, and pine needles"
+              className="w-full px-4 py-2 text-green-900 border border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
               required
             />
           </div>
@@ -72,21 +70,20 @@ export default function PuddingCrafter() {
             disabled={loading}
             className={`w-full py-3 px-4 rounded-lg text-white font-semibold transition-colors
               ${loading 
-                ? "bg-amber-300 cursor-not-allowed" 
-                : "bg-amber-600 hover:bg-amber-700"
+                ? "bg-green-400 cursor-not-allowed" 
+                : "bg-green-700 hover:bg-green-800"
               }`}
           >
-            {loading ? "Chef AI is crafting... 👨‍🍳" : "Generate Sauce Recipe"}
+            {loading ? "Foraging for recipe inspiration... 🏕️" : "Cook Now"}
           </button>
         </form>
 
-        {/* Area to display the recipe from AI */}
         {recipe && (
-          <div className="mt-8 p-6 bg-amber-50 rounded-xl border border-amber-200">
-            <h2 className="text-xl font-semibold text-amber-900 mb-4">
-              Your Special Recipe:
+          <div className="mt-8 p-6 bg-stone-50 rounded-xl border border-stone-200">
+            <h2 className="text-xl font-semibold text-green-900 mb-4">
+              Your Campfire Menu Options:
             </h2>
-            <div className="text-amber-900 whitespace-pre-wrap leading-relaxed">
+            <div className="text-stone-800 whitespace-pre-wrap leading-relaxed">
               {recipe}
             </div>
           </div>
